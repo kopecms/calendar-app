@@ -1,49 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
-<body>
-
-
-  <div class="container">
-    <h1>Calendar App</h1>
-    <p>Plan your life</p>
-  </div>
-  <div class="row">
-    <div class="col-sm-3">Login</div>
-    <div class="col-sm-9">Month
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th><a href="http://example.com">
-              <div style="height:100%;width:100%">
-                Monday
-              </div>
-            </a></th>
-            <th>Tuesday</th>
-            <th>Wednesday</th>
-            <th>Thursday</th>
-            <th>Friday</th>
-            <th>Saturday</th>
-            <th>Sunday</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in weeks%}
-          <tr><td>lol</td></tr>
-          {% endfor %}
-
-        </tbody>
-      </table>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <title>Calendar app</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="/static/calendar.css" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Calendar App</a>
+        </div>
+        <form class="navbar-form navbar-right" role="search">
+            <div class="form-group">
+                <input type="text" class="form-control" name="username" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="password" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-default">Login</button>
+            <button type="submit" class="btn btn-default">Sign Up</button>
+        </form>
+      </div>
+    </nav>
+    <div id="wrap">
+      <div id="main" class="container clear-top">
+    <div class="row">
+      <div class="col-sm-4">Login</div>
+      <div class="col-sm-8">Month
+        {{calendar}}
+      </div>
     </div>
-    <footer class="container-fluid">
-  <p>Made by Marcin Kopec</p>
-</footer>
-  </body>
-  </html>
+  </div>
+</div>
+      <footer class="footer">
+    <p>Made by Marcin Kopec</p>
+  </footer>
+
+    </body>
+    </html>
