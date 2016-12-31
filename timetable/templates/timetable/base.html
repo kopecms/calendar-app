@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+  <div class="container">
+    <h1>Calendar App</h1>
+    <p>Plan your life</p>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">Login</div>
+    <div class="col-sm-9">Month
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th><a href="http://example.com">
+              <div style="height:100%;width:100%">
+                Monday
+              </div>
+            </a></th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+            <th>Saturday</th>
+            <th>Sunday</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in weeks%}
+          <tr><td>lol</td></tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+    <footer class="container-fluid">
+  <p>Made by Marcin Kopec</p>
+</footer>
+  </body>
+  </html>
