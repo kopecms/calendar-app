@@ -2,8 +2,11 @@ from django.shortcuts import render
 
 from django.http import HttpResponse
 from django.utils.safestring import mark_safe
-from calendar_generator import Calendar
+
+from timetable.calendar_generator import Calendar
+
 from django.shortcuts import render_to_response
+
 def index(request):
   year = 2016
   month = 12

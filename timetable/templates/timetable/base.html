@@ -1,45 +1,74 @@
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <title>Calendar app</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link href="/static/calendar.css" rel="stylesheet">
-  </head>
-  <body>
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">Calendar App</a>
-        </div>
-        <form class="navbar-form navbar-right" role="search">
-            <div class="form-group">
-                <input type="text" class="form-control" name="username" placeholder="Username">
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control" name="password" placeholder="Password">
-            </div>
-            <button type="submit" class="btn btn-default">Login</button>
-            <button type="submit" class="btn btn-default">Sign Up</button>
-        </form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Calendar app</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link href="/static/calendar.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Calendar App</a>
       </div>
-    </nav>
-    <div id="wrap">
-      <div id="main" class="container clear-top">
-    <div class="row">
-      <div class="col-sm-4">Login</div>
-      <div class="col-sm-8">Month
-        {{calendar}}
+      <form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" name="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" name="password" placeholder="Password">
+        </div>
+        <button type="submit" class="btn btn-default">Login</button>
+        <button type="submit" class="btn btn-default">Sign Up</button>
+      </form>
+    </div>
+  </nav>
+  <div id="wrap">
+    <div id="main" class="container clear-top">
+      <div class="row">
+        <div class="col-sm-4">Login</div>
+        <div class="col-sm-8">Month
+          {{calendar}}
+        </div>
       </div>
     </div>
   </div>
-</div>
-      <footer class="footer">
+  <footer class="footer">
     <p>Made by Marcin Kopec</p>
   </footer>
-
-    </body>
-    </html>
+  <script src="http://code.jquery.com/jquery.min.js"></script>
+  <script src="/static/list.js"></script>
+  <script src="https://login.persona.org/include.js"></script>
+  <script>
+  $(document).ready(function() {
+    var loginLink = document.getElementById('login');
+    if (loginLink) {
+      loginLink.onclick = function() { navigator.id.request(); };
+    }
+    var logoutLink = document.getElementById('logout');
+    if (logoutLink) {
+      logoutLink.onclick = function() { navigator.id.logout(); };
+    }
+    var currentUser = '{{ user.email }}' || null;
+    var csrf_token = '{{ csrf_token }}';
+    console.log(currentUser);
+    navigator.id.watch({
+      loggedInUser: currentUser,
+      onlogin: function(assertion) {
+        $.post('/accounts/login', {assertion: assertion, csrfmiddlewaretoken: csrf_token})
+        .done(function() { window.location.reload(); })
+        .fail(function() { navigator.id.logout();});
+      },
+      onlogout: function() {
+        $.post('/accounts/logout')
+        .always(function() { window.location.reload(); });
+      }
+    });
+  });
+  </script>
+</body>
+</html>
