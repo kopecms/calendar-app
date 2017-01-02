@@ -13,9 +13,17 @@
   <nav class="navbar navbar-inverse">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="#">Calendar App</a>
+        <a class="navbar-brand" href="/">Calendar App</a>
       </div>
-      <form class="navbar-form navbar-right" role="search">
+      {% if user.is_authenticated %}
+      <ul class="nav navbar-nav navbar-right">
+      <li><a href="#">{{ user.username }}</a></li>
+       <li><a href="/logout/"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+    </ul>
+
+      {% else %}
+      <form method="post" id="login_form" action="/" class="navbar-form navbar-right" role="search">
+        {% csrf_token %}
         <div class="form-group">
           <input type="text" class="form-control" name="username" placeholder="Username">
         </div>
@@ -23,20 +31,19 @@
           <input type="text" class="form-control" name="password" placeholder="Password">
         </div>
         <button type="submit" class="btn btn-default">Login</button>
-        <button type="submit" class="btn btn-default">Sign Up</button>
+        <a href="/register/" class="btn btn-default">Sign Up</a>
       </form>
     </div>
+    {% endif %}
   </nav>
   <div id="wrap">
     <div id="main" class="container clear-top">
-      <div class="row">
-        <div class="col-sm-4">Login</div>
-        <div class="col-sm-8">Month
-          {{calendar}}
-        </div>
-      </div>
-    </div>
-  </div>
+  {%block body_part%}
+  {% endblock %}
+  {%block register_part %}
+  {%endblock %}
+</div>
+</div>
   <footer class="footer">
     <p>Made by Marcin Kopec</p>
   </footer>

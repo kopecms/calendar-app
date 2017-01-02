@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 
-{% block header_text %}Start a new To-Do list{% endblock %}
-
-{% block form_action %}{% url 'new_list' %}{% endblock %}
+{% block body_part %}
+    <div class="row">
+      <div class="col-sm-4">Login</div>
+      <div class="col-sm-8">Month
+        {{calendar}}
+      </div>
+    </div>
+{% endblock %}
