@@ -26,10 +26,9 @@ def user_login_validation(request):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/')
-    
-from django.views.decorators.csrf import csrf_exempt
 
-@csrf_exempt
+from django.views.decorators.csrf import ensure_csrf_cookie
+@ensure_csrf_cookie
 def register(request):
     context = RequestContext(request)
     registered = False

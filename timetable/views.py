@@ -10,9 +10,8 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from login.views import user_login_validation
 
-from django.views.decorators.csrf import csrf_exempt
-
-@csrf_exempt 
+from django.views.decorators.csrf import ensure_csrf_cookie
+@ensure_csrf_cookie
 def index(request):
     year = 2016
     month = 12
