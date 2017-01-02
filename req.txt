@@ -1,0 +1,4 @@
+Django==1.9.7
+olefile==0.43
+Pillow==4.0.0
+selenium==2.53.6

@@ -4,13 +4,32 @@ from django.template import  RequestContext
 from login.forms import UserForm, UserProfileForm
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
-# Use the login_required() decorator to ensure only those logged in can access the view.
+from django.http import HttpResponseRedirect, HttpResponse
+
+from django.contrib.auth import authenticate, login
+
+# use if request.method == 'POST'
+def user_login_validation(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user:
+        if user.is_active:
+            login(request, user)
+            return HttpResponseRedirect('/')
+        else:
+            return HttpResponse("Your Rango account is disabled.")
+    else:
+            return HttpResponse("Invalid login details supplied.")
+
 @login_required
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/')
+    
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 def register(request):
     context = RequestContext(request)
     registered = False

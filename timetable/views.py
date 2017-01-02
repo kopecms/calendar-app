@@ -8,7 +8,11 @@ from timetable.calendar_generator import Calendar
 from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
+from login.views import user_login_validation
 
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt 
 def index(request):
     year = 2016
     month = 12
@@ -19,16 +23,6 @@ def index(request):
     context = RequestContext(request)
 
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user:
-            if user.is_active:
-                login(request, user)
-                return HttpResponseRedirect('/')
-            else:
-                return HttpResponse("Your Rango account is disabled.")
-        else:
-                return HttpResponse("Invalid login details supplied.")
+        return user_login_validation(request)
     else:
         return render_to_response('timetable/home.html', {'calendar': mark_safe(cal), }, context)
