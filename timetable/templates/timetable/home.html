@@ -3,7 +3,7 @@
 {% block body_part %}
 <div class="row">
   <div class="col-sm-4">
-    <form method="POST" id="post-form">
+    <form class="enter-post" method="POST" id="post-form">
       {% csrf_token %}
       <div class="fieldWrapper" id="the_post">
         {{ form.text }}

@@ -1,4 +1,4 @@
-$('.input').keypress(function (event) {
+$('.enter-post').keypress(function (event) {
   if (event.which == 13) {
     event.preventDefault();
     console.log("form submitted!")  // sanity check
@@ -11,6 +11,7 @@ $('#post-form').on('submit', function(event){
   console.log("form submitted!")  // sanity check
   create_post();
 });
+
 $("tr td").click(function(e){     //function_td
   $(this).css("font-weight","bold");
   e.stopPropagation();
