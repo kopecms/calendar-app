@@ -1,10 +1,29 @@
 {% extends 'base.html' %}
 
 {% block body_part %}
-    <div class="row">
-      <div class="col-sm-4">Login</div>
-      <div class="col-sm-8">Month
-        {{calendar}}
+<div class="row">
+  <div class="col-sm-4">
+    <form method="POST" id="post-form">
+      {% csrf_token %}
+      <div class="fieldWrapper" id="the_post">
+        {{ form.text }}
       </div>
-    </div>
+      <div id="results"></div> <!-- errors go here -->
+    </form>
+
+    <ul id="talk" class="list-group">
+      <li class="list-group-item">First item</li>
+      <li class="list-group-item">Second item</li>
+      <li class="list-group-item">Third item</li>
+    </ul>
+
+  </div>
+  <div class="col-sm-8">
+    {{calendar}}
+    <ul class="pager">
+      <li class="previous"><a href="#" class="btn btn-default">Previous</a></li>
+      <li class="next"><a href="#" class="btn btn-default">Next</a></li>
+    </ul>
+  </div>
+</div>
 {% endblock %}

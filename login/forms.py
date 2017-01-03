@@ -2,6 +2,12 @@ from login.models import UserProfile
 from django.contrib.auth.models import User
 from django import forms
 
+class LoginFrom(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ('username', 'password')
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -11,7 +17,7 @@ class UserForm(forms.ModelForm):
         self.fields['email'].widget.attrs['class'] = 'form-control'
         self.fields['password'].widget.attrs['class'] = 'form-control'
         self.fields['username'].widget.attrs['class'] = 'form-control'
-        
+
     class Meta:
         model = User
         fields = ('email', 'username', 'password')
