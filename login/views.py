@@ -55,7 +55,7 @@ def register(request):
 
             profile.save()
             registered = True
-            return render(request,'timetable/home.html', {'calendar': "" })
+            return user_login_validation(request)
         else:
             print(user_form.errors, profile_form.errors)
 

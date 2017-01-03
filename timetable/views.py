@@ -23,9 +23,8 @@ def get_day(request):
         task_day = request.GET.get("task_day")
 
         response_data = {}
-
         try:
-            tasks = Task.objects.filter(date=task_day)
+            tasks = Task.objects.filter(date=task_day, owner=request.user)
             for idx, task in enumerate(tasks):
                 response_data["task"+str(idx)] = task.text
         except ObjectDoesNotExist:
@@ -49,14 +48,19 @@ def create_task(request):
         post_day =  request.POST.get('the_day')
 
         response_data = {}
+        try:
+            post = Task(text=post_text, date = post_day, owner=request.user)
+            post.save()
 
-        post = Task(text=post_text, date = post_day, owner=request.user)
-        post.save()
-
-        response_data['result'] = 'Create post successful!'
-        response_data['postpk'] = post.pk
-        response_data['text'] = post.text
-        response_data['owner'] = post.owner.username
+            response_data['result'] = 'Create post successful!'
+            response_data['postpk'] = post.pk
+            response_data['text'] = post.text
+            response_data['owner'] = post.owner.username
+        except:
+            return HttpResponse(
+                json.dumps({"text": "Log in to add tasks"}),
+                content_type="application/json"
+            )
 
         return HttpResponse(
             json.dumps(response_data),
