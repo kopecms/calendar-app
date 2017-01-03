@@ -33,8 +33,6 @@ def get_day(request):
         finally:
             pass
 
-        response_data['result'] = 'Create post successful!'
-
         return HttpResponse(
             json.dumps(response_data),
             content_type="application/json"
