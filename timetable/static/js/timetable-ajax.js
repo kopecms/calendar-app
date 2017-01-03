@@ -12,17 +12,32 @@ $('#post-form').on('submit', function(event){
   create_post();
 });
 
-$("tr td").click(function(e){     //function_td
-  $(this).css("font-weight","bold");
-  e.stopPropagation();
+$(".table").on("click", "td", function() {
+  $("td").removeClass("mark");
+  $( this ).addClass("mark");
+  $(".panel-heading").text($( this ).text()+" "+$(".month").text());
+  console.log("get day is working!") // sanity check
+  $.ajax({
+    type: "GET",
+    url: "/get_day/",
+    data: {task_day : $(".panel-heading").text() },
+    success: function(json){
+      $(".list-group").empty()
+      $.each(json, function(k, v) {
+        console.log(v);
+        $(".list-group").append('<li class="list-group-item">'+v+'</li>');
+});
+    }
+  });
 });
 
 function create_post() {
-  console.log("create post is working!") // sanity check
+  console.log($(".panel-heading").text()) // sanity check
   $.ajax({
-    url : "create_post/", // the endpoint
+    url : "/create_task/", // the endpoint
     type : "POST", // http method
-    data : { the_post : $('#post-text').val() }, // data sent with the post request
+    data : { the_post : $('#post-text').val(),
+              the_day : $(".panel-heading").text() }, // data sent with the post request
 
     // handle a successful response
     success : function(json) {

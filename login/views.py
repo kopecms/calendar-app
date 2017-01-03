@@ -7,8 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 
 from django.contrib.auth import authenticate, login
-
+from timetable.calendar_generator import create_calendar
 # use if request.method == 'POST'
+from timetable.forms import TaskForm
 def user_login_validation(request):
 
     context = RequestContext(request)
@@ -18,7 +19,8 @@ def user_login_validation(request):
     if user:
         if user.is_active:
             login(request, user)
-            return render(request, 'timetable/home.html', {'calendar': "siema" })
+            form = TaskForm()
+            return render(request, 'timetable/home.html', {'form':form,'calendar': create_calendar() })
         else:
             return HttpResponse("Your Rango account is disabled.")
     else:

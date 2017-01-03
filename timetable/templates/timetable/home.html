@@ -3,8 +3,11 @@
 {% block body_part %}
 <div class="row">
   <div class="col-sm-4">
+    <div class="panel panel-default">
+  <div class="panel-heading">No day choosen</div>
     <form class="enter-post" method="POST" id="post-form">
       {% csrf_token %}
+      <button type="submit" class="btn btn-default btn-block">Add Task</button>
       <div class="fieldWrapper" id="the_post">
         {{ form.text }}
       </div>
@@ -16,7 +19,7 @@
       <li class="list-group-item">Second item</li>
       <li class="list-group-item">Third item</li>
     </ul>
-
+</div>
   </div>
   <div class="col-sm-8">
     {{calendar}}

@@ -1,8 +1,17 @@
 from calendar import HTMLCalendar
 from datetime import date
 from itertools import groupby
-
+from django.utils.safestring import mark_safe
 from django.utils.html import conditional_escape as esc
+import datetime
+def create_calendar():
+    year = datetime.date.today().year
+    month = datetime.date.today().month
+
+    cal = Calendar().formatmonth(year, month)
+    cal = cal.split("\n",1)[1]
+    cal = '<table class="table table-bordered">\n'+cal
+    return mark_safe(cal)
 
 class Calendar(HTMLCalendar):
 

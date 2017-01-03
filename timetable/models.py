@@ -17,9 +17,10 @@ class Month(models.Model):
 
 class Task(models.Model):
     text = models.TextField(default="")
+    date = models.TextField(default="")
     owner = models.ForeignKey(User, null = True)
 
-    
+
     #mounth = models.ForeignKey(Month, default=None)
 
     def __str__(self):
