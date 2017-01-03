@@ -10,13 +10,15 @@ from django.contrib.auth import authenticate, login
 
 # use if request.method == 'POST'
 def user_login_validation(request):
+
+    context = RequestContext(request)
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
     if user:
         if user.is_active:
             login(request, user)
-            return HttpResponseRedirect('/')
+            return render_to_response('timetable/home.html', {'calendar': "siema" }, context)
         else:
             return HttpResponse("Your Rango account is disabled.")
     else:
