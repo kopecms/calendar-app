@@ -24,4 +24,4 @@ def index(request):
     if request.method == 'POST':
         return user_login_validation(request)
     else:
-        return render_to_response('timetable/home.html', {'calendar': mark_safe(cal), }, context)
+        return render(request, 'timetable/home.html', {'calendar': mark_safe(cal), })

@@ -18,7 +18,7 @@ def user_login_validation(request):
     if user:
         if user.is_active:
             login(request, user)
-            return render_to_response('timetable/home.html', {'calendar': "siema" }, context)
+            return render(request, 'timetable/home.html', {'calendar': "siema" })
         else:
             return HttpResponse("Your Rango account is disabled.")
     else:
@@ -53,7 +53,7 @@ def register(request):
 
             profile.save()
             registered = True
-            return render_to_response('timetable/home.html', {'calendar': "" }, context)
+            return render(request,'timetable/home.html', {'calendar': "" })
         else:
             print(user_form.errors, profile_form.errors)
 
@@ -61,7 +61,5 @@ def register(request):
         user_form = UserForm()
         profile_form = UserProfileForm()
 
-    return render_to_response(
-            'login/register.html',
-            {'user_form': user_form, 'profile_form': profile_form, 'registered': registered},
-            context)
+    return render(request,
+            'login/register.html',  {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
