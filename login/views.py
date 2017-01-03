@@ -12,8 +12,8 @@ from django.contrib.auth import authenticate, login
 def user_login_validation(request):
 
     context = RequestContext(request)
-    username = request.POST['username']
-    password = request.POST['password']
+    username = request.POST.get('username')
+    password = request.POST.get('password')
     user = authenticate(username=username, password=password)
     if user:
         if user.is_active:
