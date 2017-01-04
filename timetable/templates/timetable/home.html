@@ -4,30 +4,37 @@
 <div class="row">
   <div class="col-sm-4">
     <div class="panel panel-default">
-  <div class="panel-heading">Example tasks</div>
-    <form class="enter-post" method="POST" id="post-form">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-default btn-block">Add Task</button>
-      <div class="fieldWrapper" id="the_post">
-        {{ form.text }}
-      </div>
-      <div id="results"></div> <!-- errors go here -->
-    </form>
 
-    <ul id="talk" class="list-group">
-      <li class="list-group-item">buy food</li>
-      <li class="list-group-item">eat food</li>
-      <li class="list-group-item">go to sleep</li>
-      <li class="list-group-item">example</li>
-    </ul>
-</div>
+      <div class="panel-heading">Example tasks</div>
+
+      <form class="enter-post" method="POST" id="post-form">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-default btn-block">Add Task</button>
+        <div class="fieldWrapper" id="the_post">
+          {{ task_form.text }}
+        </div>
+        <div id="results"></div> <!-- errors go here -->
+      </form>
+
+      <ul id="talk" class="list-group">
+        <li class="list-group-item">buy food</li>
+        <li class="list-group-item">eat food</li>
+        <li class="list-group-item">go to sleep</li>
+        <li class="list-group-item">example</li>
+      </ul>
+
+    </div>
   </div>
+
   <div class="col-sm-8">
     {{calendar}}
     <ul class="pager">
-      <li class="previous"><a href="#" class="btn btn-default">Previous</a></li>
-      <li class="next"><a href="#" class="btn btn-default">Next</a></li>
+      <li class="previous"><a href="{% url 'other_month' date.previous_year date.previous_month %}"
+         class="btn btn-default">Previous</a></li>
+      <li class="next"><a href="{% url 'other_month' date.next_year date.next_month %}"
+         class="btn btn-default">Next</a></li>
     </ul>
   </div>
+
 </div>
 {% endblock %}

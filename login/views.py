@@ -8,35 +8,18 @@ from django.http import HttpResponseRedirect, HttpResponse
 
 from django.contrib.auth import authenticate, login
 from timetable.calendar_generator import create_calendar
-# use if request.method == 'POST'
-from timetable.forms import TaskForm
-def user_login_validation(request):
 
-    context = RequestContext(request)
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    user = authenticate(username=username, password=password)
-    if user:
-        if user.is_active:
-            login(request, user)
-            form = TaskForm()
-            return render(request, 'timetable/home.html', {'form':form,'calendar': create_calendar() })
-        else:
-            return HttpResponse("Your Rango account is disabled.")
-    else:
-            return HttpResponse("Invalid login details supplied.")
+from django.views.decorators.csrf import ensure_csrf_cookie
+from timetable.forms import TaskForm
+from timetable.views import index
 
 @login_required
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/')
 
-from django.views.decorators.csrf import ensure_csrf_cookie
 @ensure_csrf_cookie
 def register(request):
-    context = RequestContext(request)
-    registered = False
-
     if request.method == 'POST':
         user_form = UserForm(data=request.POST)
         profile_form = UserProfileForm(data=request.POST)
@@ -54,14 +37,17 @@ def register(request):
                 profile.picture = request.FILES['picture']
 
             profile.save()
-            registered = True
-            return user_login_validation(request)
+            return index(request)
+
         else:
             print(user_form.errors, profile_form.errors)
 
     else:
         user_form = UserForm()
         profile_form = UserProfileForm()
-
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        }
     return render(request,
-            'login/register.html',  {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+            'login/register.html',  context)

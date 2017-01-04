@@ -8,10 +8,11 @@ from timetable.calendar_generator import create_calendar
 from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
-from login.views import user_login_validation
 import json
+from .calendar_generator import date_info_dict
 
-from .forms import TaskForm
+from timetable.forms import TaskForm
+from login.forms import LoginForm
 
 from django.views.decorators.csrf import ensure_csrf_cookie
 from .models import Task
@@ -27,9 +28,7 @@ def get_day(request):
             tasks = Task.objects.filter(date=task_day, owner=request.user)
             for idx, task in enumerate(tasks):
                 response_data["task"+str(idx)] = task.text
-        except ObjectDoesNotExist:
-            response_data["task0"] = "No tasks"
-        finally:
+        except:
             pass
 
         return HttpResponse(
@@ -59,25 +58,49 @@ def create_task(request):
         except:
             return HttpResponse(
                 json.dumps({"text": "Log in to add tasks"}),
-                content_type="application/json"
-            )
+                content_type="application/json")
 
         return HttpResponse(
             json.dumps(response_data),
-            content_type="application/json"
-        )
+            content_type="application/json")
     else:
         return HttpResponse(
             json.dumps({"nothing to see": "this isn't happening"}),
-            content_type="application/json"
-        )
+            content_type="application/json")
 
+def other_month(request, year, month):
+    context = {
+        'task_form' : TaskForm(),
+        'login_form' : LoginForm(),
+        'calendar' : create_calendar(int(year),int(month)),
+        'date' : date_info_dict(int(year),int(month)),
+    }
+    return render(request, 'timetable/home.html', context)
 
 @ensure_csrf_cookie
 def index(request):
-
-    form = TaskForm()
     if request.method == 'POST':
-        return user_login_validation(request)
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        if user:
+            if user.is_active:
+                login(request, user)
+                context = {
+                'task_form' : TaskForm(),
+                'calendar' : create_calendar() ,
+                'date' : date_info_dict(),
+            }
+                return render(request, 'timetable/home.html', context)
+            else:
+                return HttpResponse("Your account is disabled.")
+        else:
+                return HttpResponse("Invalid login details supplied.")
     else:
-        return render(request, 'timetable/home.html', {'form':form,'calendar': create_calendar(), })
+        context = {
+            'task_form' : TaskForm(),
+            'login_form' : LoginForm(),
+            'calendar' : create_calendar(),
+            'date' : date_info_dict(),
+        }
+        return render(request, 'timetable/home.html', context)

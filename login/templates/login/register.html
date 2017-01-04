@@ -3,7 +3,6 @@
 <div class="panel-group">
   <div class="panel panel-default">
     <div class="panel-body">
-      {% if not registered %}
       <form id="user_form" class="form-horizontal" method="post" action="/register/"
       enctype="multipart/form-data">
       {% csrf_token %}
@@ -34,5 +33,4 @@
   </div>
 </div>
 </div>
-{% endif %}
 {%endblock%}
