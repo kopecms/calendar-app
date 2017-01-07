@@ -4,15 +4,23 @@ from itertools import groupby
 from django.utils.safestring import mark_safe
 from django.utils.html import conditional_escape as esc
 import datetime
+
+from django.contrib.auth.models import User
 from .models import TasksPerDay
-def create_calendar(year = datetime.date.today().year, month = datetime.date.today().month):
-    tasks_per_day = TasksPerDay.objects.order_by('date').filter(
+
+def create_calendar(request, year = datetime.date.today().year, month = datetime.date.today().month):
+    if  request.user.is_authenticated():
+        tasks_per_day = TasksPerDay.objects.order_by('date').filter(owner = request.user,
+                    date__year=year, date__month=month
+                    )
+    else:
+        tasks_per_day = TasksPerDay.objects.order_by('date').filter(owner=User.objects.get(username="exampleUser"),
                     date__year=year, date__month=month
                     )
     cal = Calendar(tasks_per_day).formatmonth(year, month)
     cal = cal.split("\n",1)[1]
     cal = '<table class="table table-bordered">\n'+cal
-
+    print(cal)
     return mark_safe(cal)
 
 def date_info_dict(year = datetime.date.today().year, month = datetime.date.today().month):

@@ -19,17 +19,22 @@ from .models import Task, TasksPerDay
 from datetime import date as dateObject
 from django.core.exceptions import ObjectDoesNotExist
 
+from django.contrib.auth.models import User
 def get_day(request):
     if request.method == 'GET':
         task_day = request.GET.get("task_day")
 
         response_data = {}
         try:
-            tasks = Task.objects.filter(date=task_day, owner=request.user)
-            for idx, task in enumerate(tasks):
-                response_data["task"+str(idx)] = task.text
+            if request.user.is_authenticated:
+                tasks = Task.objects.filter(date=task_day, owner=request.user)
+                for idx, task in enumerate(tasks):
+                    response_data["task"+str(idx)] = task.text
         except:
-            pass
+            if request.user.is_anonymous:
+                tasks = Task.objects.filter(date=task_day, owner=User.objects.get(username="exampleUser"))
+                for idx, task in enumerate(tasks):
+                    response_data["task"+str(idx)] = task.text
 
         return HttpResponse(
             json.dumps(response_data),
@@ -40,6 +45,38 @@ def get_day(request):
             json.dumps({"nothing to see": "this isn't happening"}),
             content_type="application/json"
         )
+def delete_task(request):
+    if request.method == 'POST':
+        post_text = request.POST.get('the_post')
+        post_day =  request.POST.get('the_day')
+
+        response_data = {}
+
+        post = Task.objects.filter(text=post_text, date = post_day, owner=request.user)[0]
+        post.delete()
+
+        tasks_per_day = TasksPerDay.objects.get(date_text=post_day)
+        tasks_per_day.number -= 1
+        if not tasks_per_day.number:
+            tasks_per_day.delete()
+        else:
+            tasks_per_day.save()
+
+        response_data['result'] = 'ok'
+        try:
+            pass
+        except:
+            return HttpResponse(
+                json.dumps({"text": "Log in to add tasks"}),
+                content_type="application/json")
+
+        return HttpResponse(
+            json.dumps(response_data),
+            content_type="application/json")
+    else:
+        return HttpResponse(
+            json.dumps({"nothing to see": "this isn't happening"}),
+            content_type="application/json")
 
 def create_task(request):
     if request.method == 'POST':
@@ -83,13 +120,14 @@ def other_month(request, year, month):
     context = {
         'task_form' : TaskForm(),
         'login_form' : LoginForm(),
-        'calendar' : create_calendar(int(year),int(month)),
+        'calendar' : create_calendar(request, int(year),int(month)),
         'date' : date_info_dict(int(year),int(month)),
     }
     return render(request, 'timetable/home.html', context)
 
 @ensure_csrf_cookie
 def index(request):
+    
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -99,7 +137,7 @@ def index(request):
                 login(request, user)
                 context = {
                 'task_form' : TaskForm(),
-                'calendar' : create_calendar() ,
+                'calendar' : create_calendar(request) ,
                 'date' : date_info_dict(),
             }
                 return render(request, 'timetable/home.html', context)
@@ -111,7 +149,7 @@ def index(request):
         context = {
             'task_form' : TaskForm(),
             'login_form' : LoginForm(),
-            'calendar' : create_calendar(),
+            'calendar' : create_calendar(request),
             'date' : date_info_dict(),
         }
         return render(request, 'timetable/home.html', context)
