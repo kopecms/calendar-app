@@ -45,7 +45,7 @@ $(".table").on("click", "td", function() {
   $("td").removeClass("mark");
   $( this ).addClass("mark");
   choosen = $(this)
-  $(".panel-heading").text($( this ).text().split(" ")[0]+" "+$(".month").text());
+  $(".panel-heading").text($(this).clone().children().remove().end().text().split(' ')[0]+" "+$(".month").text());
   $.ajax({
     type: "GET",
     url: "/get_day/",
@@ -68,7 +68,7 @@ function create_post() {// sanity check
       cos.text(parseInt(cos.text())+1)
     }
     else{
-      choosen.append('<span class="badge pull-right"> 1</span>');
+      choosen.append('<span class="badge pull-right">1</span>');
     }
   $.ajax({
     url : "/create_task/", // the endpoint

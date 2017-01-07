@@ -127,7 +127,6 @@ def other_month(request, year, month):
 
 @ensure_csrf_cookie
 def index(request):
-    
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
