@@ -9,14 +9,14 @@ from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 import json
-from .calendar_generator import date_info_dict
+from .calendar_generator import date_info_dict, month_to_num
 
 from timetable.forms import TaskForm
 from login.forms import LoginForm
 
 from django.views.decorators.csrf import ensure_csrf_cookie
-from .models import Task
-import datetime
+from .models import Task, TasksPerDay
+from datetime import date as dateObject
 from django.core.exceptions import ObjectDoesNotExist
 
 def get_day(request):
@@ -50,6 +50,17 @@ def create_task(request):
         try:
             post = Task(text=post_text, date = post_day, owner=request.user)
             post.save()
+
+            #...
+            try:
+                tasks_per_day = TasksPerDay.objects.get(date_text=post_day)
+                tasks_per_day.number += 1
+                tasks_per_day.save()
+            except:
+                date = post_day.split(" ")
+                tasks_per_day = TasksPerDay(number = 1,date_text = post_day, owner=request.user,
+                                            date=dateObject(int(date[2]),month_to_num(date[1]),int(date[0])))
+                tasks_per_day.save()
 
             response_data['result'] = 'Create post successful!'
             response_data['postpk'] = post.pk

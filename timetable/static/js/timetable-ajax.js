@@ -1,22 +1,21 @@
 $('.enter-post').keypress(function (event) {
   if (event.which == 13) {
     event.preventDefault();
-    console.log("form submitted!")  // sanity check
     create_post();
   }
 });
 
 $('#post-form').on('submit', function(event){
   event.preventDefault();
-  console.log("form submitted!")  // sanity check
   create_post();
 });
 
+var choosen = $(".table")
 $(".table").on("click", "td", function() {
   $("td").removeClass("mark");
   $( this ).addClass("mark");
-  $(".panel-heading").text($( this ).text()+" "+$(".month").text());
-  console.log("get day is working!") // sanity check
+  choosen = $(this)
+  $(".panel-heading").text($( this ).text().split(" ")[0]+" "+$(".month").text());
   $.ajax({
     type: "GET",
     url: "/get_day/",
@@ -31,8 +30,16 @@ $(".table").on("click", "td", function() {
   });
 });
 
-function create_post() {
-  console.log($(".panel-heading").text()) // sanity check
+function create_post() {// sanity check
+  if(choosen.text() != $(".table").text()){
+    var cos = choosen.find("span");
+    console.log(cos.length)
+    if(cos.length){
+      cos.text(parseInt(cos.text())+1)
+    }
+    else{
+      choosen.append('<span class="badge pull-right">1</span>');
+    }
   $.ajax({
     url : "/create_task/", // the endpoint
     type : "POST", // http method
@@ -52,4 +59,5 @@ function create_post() {
       console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
     }
   });
+}
 };

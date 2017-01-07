@@ -20,6 +20,8 @@ html, body {
   margin-right: -50px;
   padding-top:20px;
 }
-.choosen {
-   bgcolor: blue;
+
+.mark {
+  background-color: #f0f0f5;
+
 }

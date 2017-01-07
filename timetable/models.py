@@ -10,3 +10,9 @@ class Task(models.Model):
 
     def __str__(self):
         return self.text
+
+class TasksPerDay(models.Model):
+    number = models.IntegerField(default = 0)
+    date_text = models.TextField(default="")
+    date = models.DateField()
+    owner = models.ForeignKey(User, null = True)
